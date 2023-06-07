@@ -18,7 +18,30 @@
 
 <script>
 import credential from '../LoginCredentials/credential'
-console.log(credential)
+
+
+
+const renderFailureResponse = (email,password,errMsg) => {
+        if (email === '' && password === ''){
+          errMsg = 'Please enter email and password'
+        } else if (email === '') {
+          errMsg = 'Please enter valid email'
+        } else {
+          errMsg = 'Please enter valid password'
+        }
+        return errMsg
+}
+
+const getAuthentication = (email,password, credential) => {
+    const auth = credential.find(
+          (cred) => cred.email === email && cred.password === password
+        );
+
+    if (auth === undefined){
+      return false 
+    } return true
+}
+
 export default {
   data() {
     return {
@@ -32,17 +55,16 @@ export default {
     login() {
       if (this.email !== '' && this.password !== '') {
         this.err = false
-        console.log('Login successful');
+        const authentication = getAuthentication(this.email, this.password, credential)
+        if (authentication){
+          window.location.href = '#/'
+        } else {
+          this.err = true 
+          this.errMsg = "Enter Correct Credentials...!"
+        }
       } else {
         this.err = true
-        if (this.email === '' && this.password === ''){
-          this.errMsg = 'Please enter email and password'
-        } else if (this.email === '') {
-          this.errMsg = 'Please enter valid email'
-        } else {
-          this.errMsg = 'Please enter valid password'
-        }
-        console.log('Please enter email and password');
+        this.errMsg = renderFailureResponse(this.email,this.password,this.errMsg)
       }
     },
   },
