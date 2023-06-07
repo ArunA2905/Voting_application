@@ -1,12 +1,13 @@
 <template>
   <h1>Welcome To Voting App</h1>
   <ul>
-      <li v-for="(item,index) in items" :key="item.id">
+      <li v-for="item,index in items" :key="item.id">
         <img :src="item.imgUrl" alt="img" style="width: 200px;"/>
         <p>Vote: {{ item.vote }}</p>
         <button @click="vote(index)">Vote</button>
       </li>
     </ul>
+    <button type="button" @click="logout()">Logout</button>
 </template>
 
 <script>
@@ -19,6 +20,12 @@
       isVoted: false,
       lastIndex: null
     };
+  },
+  beforeCreate() {
+    const authUser = this.$cookies.get('auth-user');
+    if (authUser === null) {
+      window.location.href = '/login'
+    }
   },
   methods: {
     vote(index) {
@@ -39,6 +46,10 @@
         this.lastIndex = index
       }
     },
+    logout() {
+      this.$cookies.remove('auth-user')
+      window.location.href = '/login'
+    }
   },
 };
 </script>

@@ -9,6 +9,7 @@ import NotFound from './pages/NotFound.vue';
     '/login': LoginPage
   };
   const currentPath = ref(window.location.hash);
+  console.log(currentPath)
 
   window.addEventListener('hashchange', () => {
     currentPath.value = window.location.hash;

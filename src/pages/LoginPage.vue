@@ -15,11 +15,9 @@
     </form>
   </div>
 </template>
-
 <script>
+
 import credential from '../LoginCredentials/credential'
-
-
 
 const renderFailureResponse = (email,password,errMsg) => {
         if (email === '' && password === ''){
@@ -36,10 +34,9 @@ const getAuthentication = (email,password, credential) => {
     const auth = credential.find(
           (cred) => cred.email === email && cred.password === password
         );
-
     if (auth === undefined){
-      return false 
-    } return true
+      return [false, null]
+    } return [true,auth.username]
 }
 
 export default {
@@ -51,12 +48,20 @@ export default {
       errMsg: ''
     };
   },
+  beforeCreate() {
+    const authUser = this.$cookies.get('auth-user');
+    if (authUser) {
+      window.location.href = '/'
+    }
+  },
   methods: {
     login() {
       if (this.email !== '' && this.password !== '') {
         this.err = false
-        const authentication = getAuthentication(this.email, this.password, credential)
+        const [authentication,auth] = getAuthentication(this.email, this.password, credential)
+
         if (authentication){
+          this.$cookies.set('auth-user',auth)
           window.location.href = '#/'
         } else {
           this.err = true 
