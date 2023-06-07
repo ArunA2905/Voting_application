@@ -23,9 +23,16 @@
   methods: {
     vote(index) {
       if (this.isVoted){
-        this.items[this.lastIndex].vote--;
-        this.items[index].vote++;
-        this.lastIndex = index;
+        if (this.lastIndex === index){
+          this.items[this.lastIndex].vote--;
+          this.lastIndex = null
+        } else {
+          if (this.lastIndex !== null){
+            this.items[this.lastIndex].vote--;
+          }
+          this.items[index].vote++;
+          this.lastIndex = index;
+        }
       } else {
         this.isVoted = true
         this.items[index].vote++;
