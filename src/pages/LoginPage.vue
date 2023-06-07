@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h1>Login</h1>
+    <h1>Login to continue</h1>
     <form @submit.prevent="login">
       <div>
-        <label for="email">Email:</label>
+        <label for="email">Email : </label>
         <input type="email" id="email" v-model="email">
       </div>
       <div>
-        <label for="password">Password:</label>
+        <label for="password">Password : </label>
         <input type="password" id="password" v-model="password">
       </div>
       <button type="submit">Login</button>

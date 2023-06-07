@@ -20,15 +20,6 @@ import NotFound from './pages/NotFound.vue';
 </script>
 
 <template>
-  <h1>Welcome To Voting App</h1>
-  <div>
-    <ul >
-      <li><a href="#/">Home</a></li>
-      <li><a href="#/login">LoginPage</a></li>
-      <li><a href="#/not-found">PageNotFound</a></li>
-    </ul>
-  </div>
-
   <div>
     <component :is="currentView"></component>
   </div>
