@@ -20,7 +20,10 @@ import NotFound from './pages/NotFound.vue';
 </script>
 
 <template>
-  <div>
+  <div class="app-container">
     <component :is="currentView"></component>
   </div>
 </template>
+
+<style scoped src="./assets/css/app.css">
+</style>

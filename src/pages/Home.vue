@@ -1,15 +1,19 @@
 <template>
-  <h1>Welcome To Voting App</h1>
-  <ul>
-    <li v-for="item,index in items" :key="item.id">
-      <img :src="item.imgUrl" alt="img" style="width: 200px;"/>
-      <p>Vote: {{ item.vote }}</p>
-      <button @click="vote(index)">Vote</button>
-    </li>
-  </ul>
-  <button type="button" @click="save()">Save</button>
-  <button type="button" @click="reset()">Reset Vote</button>
-  <button type="button" @click="logout()">Logout</button>
+  <div v-cloak class="home-container">
+    <h1 class="home-heading">Welcome To Voting App</h1>
+    <ul class="home-list-container">
+      <li class="list" v-for="item,index in items" :key="item.id">
+        <img :src="item.imgUrl" alt="img" class="img"/>
+        <p class="vote-text">Vote: {{ item.vote }}</p>
+        <button class="vote-btn" @click="vote(index)">Vote</button>
+      </li>
+    </ul>
+    <div class="button-container">
+      <button type="button" class="btn save-btn" @click="save()">Save</button>
+      <button type="button" class="btn reset-btn" @click="reset()">Reset Vote</button>
+      <button type="button" class="btn logout-btn" @click="logout()">Logout</button>
+  </div>
+</div>
 </template>
 
 <script>
@@ -103,3 +107,7 @@
   },
 };
 </script>
+
+<style scoped src="../assets/css/home.css">
+/* @import '../assets/css/home.css'; */
+</style>
