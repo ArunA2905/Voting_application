@@ -1,27 +1,59 @@
 <template>
   <h1>Welcome To Voting App</h1>
   <ul>
-      <li v-for="item,index in items" :key="item.id">
-        <img :src="item.imgUrl" alt="img" style="width: 200px;"/>
-        <p>Vote: {{ item.vote }}</p>
-        <button @click="vote(index)">Vote</button>
-      </li>
-    </ul>
-    <button type="button" @click="logout()">Logout</button>
+    <li v-for="item,index in items" :key="item.id">
+      <img :src="item.imgUrl" alt="img" style="width: 200px;"/>
+      <p>Vote: {{ item.vote }}</p>
+      <button @click="vote(index)">Vote</button>
+    </li>
+  </ul>
+  <button type="button" @click="save()">Save</button>
+  <button type="button" @click="reset()">Reset Vote</button>
+  <button type="button" @click="logout()">Logout</button>
 </template>
 
 <script>
   import data from '../assets/data'
+
+  const getData = () => {
+    const Votingdata = localStorage.getItem('votingData')
+    if (Votingdata === null){
+      return data
+    } else {
+      const parsedData = JSON.parse(Votingdata)
+      return parsedData.votingData
+    } 
+  }
+
+  const getVoteSts = () => {
+    const Votingdata = localStorage.getItem('votingData')
+    if (Votingdata === null){
+      return false 
+    } else {
+      const parsedData = JSON.parse(Votingdata)
+      return parsedData.voteStats
+    }
+  }
+
+  const getLastIndex = () => {
+    const Votingdata = localStorage.getItem('votingData')
+    if (Votingdata === null){
+      return null 
+    } else {
+      const parsedData = JSON.parse(Votingdata)
+      return parsedData.indexStats
+    }
+  }
   
   export default {
   data() {
     return {
-      items: data,
-      isVoted: false,
-      lastIndex: null
+      items: getData(),
+      isVoted: getVoteSts(),
+      lastIndex: getLastIndex()
     };
   },
-  beforeCreate() {
+  beforeMount() {
     const authUser = this.$cookies.get('auth-user');
     if (authUser === null) {
       window.location.href = '/login'
@@ -45,6 +77,14 @@
         this.items[index].vote++;
         this.lastIndex = index
       }
+    },
+    save() {
+      const data = {votingData: this.items, voteStats: this.isVoted, indexStats: this.lastIndex}
+      const jsonData = JSON.stringify(data)
+      localStorage.setItem('votingData', jsonData)
+    },
+    reset() {
+      localStorage.removeItem('votingData')
     },
     logout() {
       this.$cookies.remove('auth-user')

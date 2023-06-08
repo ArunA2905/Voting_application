@@ -19,6 +19,11 @@
 
 import credential from '../LoginCredentials/credential'
 
+// const authUser = this.$cookies.get("auth-user");
+// console.log(authUser)
+
+
+
 const renderFailureResponse = (email,password,errMsg) => {
         if (email === '' && password === ''){
           errMsg = 'Please enter email and password'
@@ -48,10 +53,10 @@ export default {
       errMsg: ''
     };
   },
-  beforeCreate() {
+  beforeMount() {
     const authUser = this.$cookies.get('auth-user');
     if (authUser) {
-      window.location.href = '/'
+      window.location.href = '#/'
     }
   },
   methods: {
