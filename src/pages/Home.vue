@@ -14,6 +14,7 @@
 
 <script>
   import data from '../assets/data'
+  
 
   const getData = () => {
     const Votingdata = localStorage.getItem('votingData')
@@ -21,26 +22,30 @@
       return data
     } else {
       const parsedData = JSON.parse(Votingdata)
-      return parsedData.votingData
+      return parsedData
     } 
   }
 
   const getVoteSts = () => {
-    const Votingdata = localStorage.getItem('votingData')
-    if (Votingdata === null){
+    const userName = $cookies.get('auth-user')
+    
+    const userStats = localStorage.getItem(`user${userName}`)
+    if (userStats === null){
       return false 
     } else {
-      const parsedData = JSON.parse(Votingdata)
+      const parsedData = JSON.parse(userStats)
       return parsedData.voteStats
     }
   }
 
   const getLastIndex = () => {
-    const Votingdata = localStorage.getItem('votingData')
-    if (Votingdata === null){
+    const userName = $cookies.get('auth-user')
+
+    const userStats = localStorage.getItem(`user${userName}`)
+    if (userStats === null){
       return null 
     } else {
-      const parsedData = JSON.parse(Votingdata)
+      const parsedData = JSON.parse(userStats)
       return parsedData.indexStats
     }
   }
@@ -79,12 +84,17 @@
       }
     },
     save() {
-      const data = {votingData: this.items, voteStats: this.isVoted, indexStats: this.lastIndex}
-      const jsonData = JSON.stringify(data)
+      const votingData = this.items
+      const jsonData = JSON.stringify(votingData)
       localStorage.setItem('votingData', jsonData)
+
+      const userName = this.$cookies.get('auth-user')
+      const userStats = {username: userName, voteStats: this.isVoted, indexStats: this.lastIndex}
+      const userstatsJson = JSON.stringify(userStats)
+      localStorage.setItem(`user${userName}`, userstatsJson)
     },
     reset() {
-      localStorage.removeItem('votingData')
+      localStorage.clear();
     },
     logout() {
       this.$cookies.remove('auth-user')
