@@ -62,7 +62,7 @@
   export default {
   data() {
     return {
-      items: null, //getData(),
+      items: getData(),
       isVoted: getVoteSts(),
       lastIndex: getLastIndex()
     };
@@ -76,7 +76,17 @@
   created() {
     axios.get('http://localhost:3000/data',)
   .then(response => {
-    this.items =  response.data
+    //this.items =  response.data
+    //console.log(response.data)
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+  axios.get('http://localhost:3000/user_stats',)
+  .then(response => {
+    //this.items =  response.data
+    //console.log(response.data)
   })
   .catch(error => {
     console.error(error);
@@ -107,10 +117,27 @@
       localStorage.setItem('votingData', jsonData)
 
       const userid = this.$cookies.get('auth-user')
-      const userStats = {userId: userid, voteStats: this.isVoted, indexStats: this.lastIndex}
+     // const userStats = {userId: userid, voteStats: this.isVoted, indexStats: this.lastIndex}
+     // const userStats = {userId: userid, voteStatus: this.isVoted, lastVote: this.lastIndex}
+     const userStats = {userId: 1, voteStatus: true, lastVote: 1}
       const userstatsJson = JSON.stringify(userStats)
       localStorage.setItem(`user${userid}`, userstatsJson)
-      console.log("saved")
+
+      axios.post('http://localhost:3000/user_stats', {
+        user_stat: {
+          ...userStats
+        }
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+          console.log(userstatsJson)
+          console.log(response);
+        })
+        .catch(error => {
+          console.error(error);
+        });
     },
     reset() {
       localStorage.clear();
