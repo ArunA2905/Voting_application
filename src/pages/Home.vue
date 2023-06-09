@@ -17,6 +17,7 @@
 </template>
 
 <script>
+  import axios from 'axios'
   import data from '../assets/data'
   
 
@@ -30,10 +31,14 @@
     } 
   }
 
-  const getVoteSts = () => {
-    const userName = $cookies.get('auth-user')
+  const getDbData = () => {
     
-    const userStats = localStorage.getItem(`user${userName}`)
+  }
+
+  const getVoteSts = () => {
+    const userId = $cookies.get('auth-user')
+    
+    const userStats = localStorage.getItem(`user${userId}`)
     if (userStats === null){
       return false 
     } else {
@@ -43,9 +48,9 @@
   }
 
   const getLastIndex = () => {
-    const userName = $cookies.get('auth-user')
+    const userId = $cookies.get('auth-user')
 
-    const userStats = localStorage.getItem(`user${userName}`)
+    const userStats = localStorage.getItem(`user${userId}`)
     if (userStats === null){
       return null 
     } else {
@@ -57,7 +62,7 @@
   export default {
   data() {
     return {
-      items: getData(),
+      items: null, //getData(),
       isVoted: getVoteSts(),
       lastIndex: getLastIndex()
     };
@@ -68,6 +73,15 @@
       window.location.href = '/login'
     }
   },
+  created() {
+    axios.get('http://localhost:3000/data',)
+  .then(response => {
+    this.items =  response.data
+  })
+  .catch(error => {
+    console.error(error);
+  });
+ },
   methods: {
     vote(index) {
       if (this.isVoted){
@@ -92,13 +106,15 @@
       const jsonData = JSON.stringify(votingData)
       localStorage.setItem('votingData', jsonData)
 
-      const userName = this.$cookies.get('auth-user')
-      const userStats = {username: userName, voteStats: this.isVoted, indexStats: this.lastIndex}
+      const userid = this.$cookies.get('auth-user')
+      const userStats = {userId: userid, voteStats: this.isVoted, indexStats: this.lastIndex}
       const userstatsJson = JSON.stringify(userStats)
-      localStorage.setItem(`user${userName}`, userstatsJson)
+      localStorage.setItem(`user${userid}`, userstatsJson)
+      console.log("saved")
     },
     reset() {
       localStorage.clear();
+      this.isVoted = false
     },
     logout() {
       this.$cookies.remove('auth-user')

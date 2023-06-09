@@ -41,7 +41,7 @@ const getAuthentication = (email,password, credential) => {
         );
     if (auth === undefined){
       return [false, null]
-    } return [true,auth.username]
+    } return [true,auth.id]
 }
 
 export default {
