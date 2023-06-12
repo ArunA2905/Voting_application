@@ -5,7 +5,7 @@
       <li class="list" v-for="item,index in items" :key="item.id">
         <img :src="item.imgUrl" alt="img" class="img"/>
         <p class="vote-text">Vote: {{ item.vote }}</p>
-        <button class="vote-btn" @click="vote(index)">Vote</button>
+        <button class="vote-btn" @click="vote(item.id)">Vote</button>
       </li>
     </ul>
     <div class="button-container">
@@ -65,7 +65,15 @@
   }
  },
   methods: {
-    vote(index) {
+    vote(id) {
+      //console.log(this.items)
+      let index;
+      for (let i = 0; i < this.items.length; i++) {
+        if (this.items[i].id === id) {
+          index = i;
+        }
+      }
+      
       if (this.isVoted){
         if (this.lastIndex === index){
           this.items[this.lastIndex].vote--;
@@ -73,9 +81,10 @@
         } else {
           if (this.lastIndex !== null){
             this.items[this.lastIndex].vote--;
-          }
-          this.items[index].vote++;
-          this.lastIndex = index;
+          } 
+            this.items[index].vote++;
+            this.lastIndex = index;
+          
         }
       } else {
         this.isVoted = true
@@ -85,15 +94,15 @@
     },
     async save() {
       this.items.forEach((item,i) => {
-      const data = { vote: item.vote };
-    
-      axios.put(`http://localhost:3000/data/${i+1}`, data)
-        .then(response => {
-          //console.log(response.data);
-        })
-        .catch(error => {
-          console.error(error);
-        });
+        const data = { vote: item.vote };
+      
+        axios.put(`http://localhost:3000/data/${i+1}`, data)
+          .then(response => {
+            //console.log(response.data);
+          })
+          .catch(error => {
+            console.error(error);
+          });
       });
 
       const userid = this.$cookies.get('auth-user')
