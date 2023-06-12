@@ -1,16 +1,16 @@
 <template>
-  <div>
-    <h1>Login to continue</h1>
+  <div class="login-form-container">
+    <h1 class="login-heading">Login to continue</h1>
     <form @submit.prevent="login">
-      <div>
-        <label for="email">Email : </label>
-        <input type="email" id="email" v-model="email">
+      <div class="input-card">
+        <label class="input-label" for="email">Email : </label>
+        <input class="input-bar" type="email" id="email" v-model="email">
       </div>
-      <div>
-        <label for="password">Password : </label>
-        <input type="password" id="password" v-model="password">
+      <div class="input-card">
+        <label class="input-label" for="password">Password : </label>
+        <input class="input-bar" type="password" id="password" v-model="password">
       </div>
-      <button type="submit">Login</button>
+      <button class="login-btn" type="submit">Login</button>
       <p v-if="err">{{errMsg}}</p>
     </form>
   </div>
@@ -80,3 +80,6 @@ export default {
   },
 };
 </script>
+
+<style scoped src="../assets/css/login.css">
+</style>

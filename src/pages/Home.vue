@@ -10,7 +10,6 @@
     </ul>
     <div class="button-container">
       <button type="button" class="btn save-btn" @click="save()">Save</button>
-      <button type="button" class="btn reset-btn" @click="reset()">Reset Vote</button>
       <button type="button" class="btn logout-btn" @click="logout()">Logout</button>
   </div>
 </div>
@@ -148,10 +147,6 @@
             console.error(error);
           });
       }
-    },
-    reset() {
-      localStorage.clear();
-      this.isVoted = false
     },
     logout() {
       this.$cookies.remove('auth-user')
