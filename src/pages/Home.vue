@@ -12,6 +12,11 @@
       <button type="button" class="btn save-btn" @click="save()">Save</button>
       <button type="button" class="btn logout-btn" @click="logout()">Logout</button>
   </div>
+  <div>
+    <input type="file" id="file" ref="file" @change="handleFileUpload">
+    <button @click="uploadFile">Upload</button>
+    <button @click="fetchFileData(9)">Fetch Data</button>
+  </div>
 </div>
 </template>
 
@@ -24,7 +29,8 @@
     return {
       items: [],
       isVoted: false,
-      lastIndex: null
+      lastIndex: null,
+      file: null
     };
   },
   beforeMount() {
@@ -146,14 +152,50 @@
           .catch(error => {
             console.error(error);
           });
+          
       }
     },
     logout() {
       this.$cookies.remove('auth-user')
       window.location.href = '/login'
-    }
-  },
-};
+    },
+    handleFileUpload(event) {
+      this.file = event.target.files[0];
+    },
+    uploadFile() {
+      
+      const formData = new FormData();
+      formData.append('file', this.file);
+      console.log(...formData);
+
+      axios.post('http://localhost:3000/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then(response => {
+          console.log(response.data);
+          console.log('File uploaded successfully');
+        })
+        .catch(error => {
+          console.error(error);
+          console.log('Failed to upload file');
+        });
+    },
+    async fetchFileData(uploadId) {
+      let uploadSts;
+
+      try {
+        const response = await axios.get(`http://localhost:3000/upload/${uploadId}`);
+        uploadSts = response.data;
+      } catch (error) {
+        console.error(error);
+      }
+      console.log(uploadSts)
+    },
+  }
+}
+
 </script>
 
 <style scoped src="../assets/css/home.css">
